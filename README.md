@@ -19,4 +19,4 @@ Note: this is a prototype heavily based on GlauberMST.
 * Implement an entropy algorithm for finding the best clusterization (based on number of protons and neutrons in a cluster, see [Entropy (information theory)](https://en.wikipedia.org/wiki/Entropy_(information_theory))
 * Combine entropy and silhouette algorithms
 * Try other decision rules
-* Integrate into (AAMCC)[https://github.com/alexsvetlichnyy/AAMCC]
+* Integrate into [AAMCC](https://github.com/alexsvetlichnyy/AAMCC)
