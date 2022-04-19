@@ -3,7 +3,7 @@
 
 ## Idea
 
-The idea of the project is to apply more advanced clustering algorithms to GlauberMST in order to resolve the discrepancy of the result of AAMCC and experimental results for light nuclei fragmentation (see [article](https://doi.org/10.1016/0020-0190(78)90039-X)), while using hierarchical clustering methods to optimize searching for an optimal clusterization.
+The idea of the project is to apply more advanced clustering algorithms to GlauberMST in order to resolve the discrepancy of the result of AAMCC and experimental results for light nuclei fragmentation (see [article](https://doi.org/10.3390/particles5010004)), while using hierarchical clustering methods to optimize searching for an optimal clusterization.
 
 Note: this is a prototype heavily based on GlauberMST.
 
