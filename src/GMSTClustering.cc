@@ -1,7 +1,7 @@
 #include "../include/GMSTClustering.hh"
 #include <queue>
 #define VAR .20
-#define single_attr  .3
+#define single_attr .5
 
 
 bool cd_comp(const GNode& left, const GNode& right) {
@@ -105,7 +105,7 @@ GMSTClusterVector GMSTClustering::GetClusters_HSilhouette() {
     double max_silh = -1;
     vector<GNode> best = current;
     //calculate mean cluster silhouettes until min applicable CD
-    //separate nucleon clusters are given silhouette of 0
+    //separate nucleon clusters are given silhouette of single_attr
     while (current.front().height >= CritDist * (1.0 - VAR)) {
         double silh = 0;
         for (auto iter = current.cbegin(); iter != current.cend(); iter++) {
@@ -148,6 +148,7 @@ GMSTClusterVector GMSTClustering::GetClusters_HSilhouette() {
         current.push_back(*current.front().children.first);
         current.push_back(*current.front().children.second);
         current.erase(current.begin());
+        sort(current.begin(), current.end(), cd_comp);
     }
     //compile output vector
     vector<vector<int>> clusters;
