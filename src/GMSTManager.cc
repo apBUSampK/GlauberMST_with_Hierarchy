@@ -8,7 +8,7 @@
 
 
 GMSTManager::GMSTManager()
-  : NucA("Pb"), NucB("Pb"), sigmaNN(-1), CritDist(-1), iterations(-1)
+  : NucA("Pb"), NucB("Pb"), sigmaNN(-1), CritDist(-1), iterations(-1), single_silh(-2)
 { 
   std::cout << "------------------------------------------------\n";
 
@@ -44,7 +44,14 @@ GMSTManager::GMSTManager()
     std::cout<<"Please enter number of iterations: ";
     std::cin >> iterations;
 
-  } 
+  }
+
+  std::cout<<"\n";
+
+  while (single_silh < -1 || single_silh > 1) {
+      std::cout << "Please enter silhouette of a single nucleon: ";
+      std::cin >> single_silh;
+  }
 
   std::cout<<"\n";
 

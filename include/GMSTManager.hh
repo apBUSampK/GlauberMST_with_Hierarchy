@@ -35,6 +35,7 @@ class GMSTManager
   inline const char* GetNucleusB() {return NucB.c_str();}; 
   inline double GetSigmaNN() {return sigmaNN;};
   inline double GetCriticalDistance() {return CritDist;}
+  inline double GetSingleSilhouette() {return single_silh;}
   inline int GetZ() {return sourceZ;};
   inline int GetA() {return sourceA;};
   inline int GetIterations()  {return iterations;};
@@ -59,6 +60,7 @@ class GMSTManager
     int MForNot; 
     double sigmaNN;
     double CritDist;
+    double single_silh;
     std::string NucA;
     std::string NucB;
 

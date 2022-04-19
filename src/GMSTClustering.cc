@@ -1,7 +1,6 @@
 #include "../include/GMSTClustering.hh"
 #include <queue>
 #define VAR .20
-#define single_attr .5
 
 
 bool cd_comp(const GNode& left, const GNode& right) {
@@ -18,8 +17,9 @@ GMSTClustering::GMSTClustering(){
 CritDist = 0;
 }
 
-GMSTClustering::GMSTClustering(double CD_in){
-CritDist = CD_in;
+GMSTClustering::GMSTClustering(double CD_in, double single_silh){
+    CritDist = CD_in;
+    this->single_silh = single_silh;
 };
 
 GMSTClustering::~GMSTClustering(){
@@ -105,7 +105,7 @@ GMSTClusterVector GMSTClustering::GetClusters_HSilhouette() {
     double max_silh = -1;
     vector<GNode> best = current;
     //calculate mean cluster silhouettes until min applicable CD
-    //separate nucleon clusters are given silhouette of single_attr
+    //separate nucleon clusters are given silhouette of single_silh
     while (current.front().height >= CritDist * (1.0 - VAR)) {
         double silh = 0;
         for (auto iter = current.cbegin(); iter != current.cend(); iter++) {
@@ -137,7 +137,7 @@ GMSTClusterVector GMSTClustering::GetClusters_HSilhouette() {
                     silh += ((outer - inner) / max(outer, inner));
                 }
             else
-                silh += single_attr;
+                silh += single_silh;
             }
         silh /= A;
         if (silh > max_silh) {
