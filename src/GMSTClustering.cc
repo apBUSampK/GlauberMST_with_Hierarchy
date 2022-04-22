@@ -112,24 +112,14 @@ GMSTClusterVector GMSTClustering::GetClusters_HSilhouette() {
             if (iter->size > 1)
                 for (int i = 0; i < iter->size; i++) {
                     double inner = 0, outer = -1;
-                    TGlauNucleon *nucleon = (TGlauNucleon *) (nucleons->At(iter->V[i] - 1));
                     for (int j = 0; j < iter->size; j++)
-                        if (j != i) {
-                            TGlauNucleon *nucleon_pair = (TGlauNucleon *) (nucleons->At(iter->V[j] - 1));
-                            inner += std::sqrt(pow(nucleon->GetX() - nucleon_pair->GetX(), 2) +
-                                               pow(nucleon->GetY() - nucleon_pair->GetY(), 2) +
-                                               pow(nucleon->GetZ() - nucleon_pair->GetZ(), 2));
-                        }
+                        inner += g.adj[iter->V[i] - 1][iter->V[j] - 1];
                     inner /= (iter->size - 1);
                     for (auto jter = current.cbegin(); jter != current.cend(); jter++)
                         if (iter != jter) {
                             double buff = 0;
-                            for (int j = 0; j < jter->size; j++) {
-                                TGlauNucleon *nucleon_pair = (TGlauNucleon *) (nucleons->At(jter->V[j] - 1));
-                                buff += std::sqrt(pow(nucleon->GetX() - nucleon_pair->GetX(), 2) +
-                                                  pow(nucleon->GetY() - nucleon_pair->GetY(), 2) +
-                                                  pow(nucleon->GetZ() - nucleon_pair->GetZ(), 2));
-                            }
+                            for (int j = 0; j < jter->size; j++)
+                                buff += g.adj[iter->V[i] - 1][jter->V[j] - 1];
                             buff /= jter->size;
                             if (outer < 0 || buff < outer)
                                 outer = buff;
@@ -161,13 +151,14 @@ Graph::Graph(int V, int E)
 {
     this->V = V;
     this->E = E;
+    adj = vector<vector<double>>(V, vector<double>(V, 0));
 }
 
 Graph::Graph()
 {
     this->V = 0;
     this->E = 0;
-
+    adj = vector<vector<double>>(V, vector<double>(V, 0));
 }
 
 Graph::~Graph() = default;
@@ -175,6 +166,8 @@ Graph::~Graph() = default;
 void Graph::addEdge(int u, int v, double w)
 {
     edges.push_back({ w, {u, v} });
+    adj[u][v] = w;
+    adj[v][u] = w;
 }
 
 GTree Graph::AdvancedKruskalMST_Dendro()

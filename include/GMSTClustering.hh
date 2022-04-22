@@ -64,6 +64,7 @@ struct Graph
 	// Vert and edges
     int V, E;
     vector< pair<double, iPair> > edges;
+    vector<vector<double>> adj;
 
     // Constructors 
     Graph(int V, int E);

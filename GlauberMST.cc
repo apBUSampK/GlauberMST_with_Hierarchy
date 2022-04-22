@@ -61,7 +61,6 @@ for(int count = 0; count < manager->GetIterations()+1; count++){
     NpartB = mcg->GetNpartB();
     Ncoll  = mcg->GetNcoll();
     b = mcg->GetB();
-
     TObjArray* nucleons=mcg->GetNucleons();
     clust_manager->SetUp(nucleons);
     GMSTClusterVector clusters_output;
