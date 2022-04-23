@@ -1,3 +1,5 @@
+#ifndef GMSTCLUSTERING_HH
+#define GMSTCLUSTERING_HH
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -46,9 +48,6 @@ class GTree {
 
     //get node
     inline const GNode* get_node(int a) {return nodes[a].get();}
-
-    //get size
-    int get_size() {return size;};
 
     //width print (for testing purposes)
     friend ostream& operator<< (ostream&, const GTree&);
@@ -109,7 +108,7 @@ class GMSTClustering{
 
 	inline double SetCD(double CD_in) {CritDist = CD_in;}
     void SetUp(TObjArray*);
-	
+
     GTree GetTree();
 	GMSTClusterVector GetClusters();
     GMSTClusterVector GetClusters_HSilhouette();
@@ -122,3 +121,5 @@ class GMSTClustering{
     Graph ClusterToGraph();
     GMSTClusterVector CompileVector(const vector<vector<int>>&);
 };
+
+#endif
