@@ -65,7 +65,7 @@ for(int count = 0; count < manager->GetIterations()+1; count++){
     TObjArray* nucleons=mcg->GetNucleons();
     clust_manager->SetUp(nucleons);
     GMSTClusterVector clusters_output;
-    clusters_output = clust_manager->GetClusters();
+    clusters_output = clust_manager->GetClusters(GMSTClustering::cut());
 
     for(auto & i : clusters_output) {
         A.push_back(i.GetA());
@@ -73,7 +73,7 @@ for(int count = 0; count < manager->GetIterations()+1; count++){
     }
 
 
-    clusters_output = clust_manager->GetClusters_HSilhouette();
+    clusters_output = clust_manager->GetClusters(GMSTClustering::silhouette());
 
     for(auto & i : clusters_output) {
         A_t.push_back(i.GetA());

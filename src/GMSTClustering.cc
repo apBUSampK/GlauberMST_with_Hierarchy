@@ -73,7 +73,7 @@ inline GTree GMSTClustering::GetTree() {
     return g.AdvancedKruskalMST_Dendro();
 }
 
-GMSTClusterVector GMSTClustering::GetClusters() {
+GMSTClusterVector GMSTClustering::GetClusters(cut) {
     //check for empty nucleons input
     if(!A)
         return CompileVector(vector<vector<int>>());
@@ -89,7 +89,7 @@ GMSTClusterVector GMSTClustering::GetClusters() {
     return CompileVector(clusters);
 }
 
-GMSTClusterVector GMSTClustering::GetClusters_HSilhouette() {
+GMSTClusterVector GMSTClustering::GetClusters(silhouette) {
     //check for empty nucleons input
     if(!A)
         return CompileVector(vector<vector<int>>());
@@ -143,6 +143,46 @@ GMSTClusterVector GMSTClustering::GetClusters_HSilhouette() {
         clusters.emplace_back(vector<int>(iter.V, iter.V + iter.size));
 	return CompileVector(clusters);
 };
+
+GMSTClusterVector GMSTClustering::GetClusters(max_alpha) {
+    //check for empty nucleons input
+    if(!A)
+        return CompileVector(vector<vector<int>>());
+    //Get the c-link dendrogram
+    auto tr = g.AdvancedKruskalMST_Dendro();
+
+    //get the clustering with the biggest applicable CD:
+    vector<GNode> current = tr.get_cluster(CritDist * (1.0 + variation));
+    sort(current.begin(), current.end(), cd_comp);
+    int max_alpha = 0;
+    vector<GNode> best = current;
+    //find the cluster with the largest alpha particles count
+    while (current.front().height > CritDist * (1.0 - (variation > 1 ? 1 : variation))) {
+        int alpha = 0;
+        for (auto & iter : current) {
+            int z_count = 0;
+            for (int i = 0; i < iter.size; i++)
+                if (((TGlauNucleon*)nucleons->At(iter.V[i]))->IsProton())
+                    z_count++;
+            if (z_count == 2)
+                alpha++;
+        }
+        if (alpha > max_alpha) {
+            max_alpha = alpha;
+            best = current;
+        }
+        //divide the biggest cluster into two
+        current.push_back(*current.front().children.first);
+        current.push_back(*current.front().children.second);
+        current.erase(current.begin());
+        sort(current.begin(), current.end(), cd_comp);
+    }
+    //compile output vector
+    vector<vector<int>> clusters;
+    for (const auto & iter : best)
+        clusters.emplace_back(vector<int>(iter.V, iter.V + iter.size));
+    return CompileVector(clusters);
+}
 
 Graph::Graph(int V, int E)
 {

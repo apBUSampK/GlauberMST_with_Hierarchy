@@ -8,7 +8,7 @@
 #include "TObject.h"
 using namespace std;
 
-// Creating shortcut for an integer pair 
+// Creating shortcut for an integer pair
 typedef  pair<int, int> iPair;
 
 struct GNode {
@@ -57,7 +57,7 @@ class GTree {
     vector<shared_ptr<GNode>> nodes;
 };
 
-// Structure to represent a graph 
+// Structure to represent a graph
 struct Graph
 {
 	// Vert and edges
@@ -65,7 +65,7 @@ struct Graph
     vector< pair<double, iPair> > edges;
     vector<vector<double>> adj;
 
-    // Constructors 
+    // Constructors
     Graph(int V, int E);
     Graph();
 
@@ -74,7 +74,7 @@ struct Graph
 
     // Utility function to add an edge
     void addEdge(int u, int v, double w);
-    // Function to find MST using Kruskal's 
+    // Function to find MST using Kruskal's
     // MST algorithm
     // hierarchical algorithms
     GTree AdvancedKruskalMST_Dendro();
@@ -82,17 +82,17 @@ struct Graph
 
 class GMSTCluster{
 
-	public: 
+	public:
 	GMSTCluster(int Z_in, int A_in);
 	~GMSTCluster();
 
-	public: 
+	public:
 	inline int GetZ() {return Z;};
 	inline int GetA() {return A;};
 	inline int SetZ(int Z_in) {Z = Z_in;}
 	inline int SetA(int A_in) {A = A_in;}
 
-	private: 
+	private:
 	int Z;
 	int A;
 };
@@ -110,8 +110,12 @@ class GMSTClustering{
     void SetUp(TObjArray*);
 
     GTree GetTree();
-	GMSTClusterVector GetClusters();
-    GMSTClusterVector GetClusters_HSilhouette();
+    struct cut{};
+    struct silhouette{};
+    struct max_alpha{};
+    GMSTClusterVector GetClusters(cut);
+    GMSTClusterVector GetClusters(silhouette);
+    GMSTClusterVector GetClusters(max_alpha);
 	private:
 	//Work with graphs is up to Nepeyvoda Roman, even data types. I prefer GraphToCluster and ClusterToGraph methods to be private
 	double CritDist, single_silh, variation;
