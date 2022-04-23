@@ -8,7 +8,7 @@
 
 
 GMSTManager::GMSTManager()
-  : NucA("Pb"), NucB("Pb"), sigmaNN(-1), CritDist(-1), iterations(-1), single_silh(-2)
+  : NucA("Pb"), NucB("Pb"), sigmaNN(-1), CritDist(-1), iterations(-1), single_silh(-2), variation(-1)
 { 
   std::cout << "------------------------------------------------\n";
 
