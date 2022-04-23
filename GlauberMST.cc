@@ -73,7 +73,7 @@ for(int count = 0; count < manager->GetIterations()+1; count++){
     }
 
 
-    clusters_output = clust_manager->GetClusters(GMSTClustering::silhouette());
+    clusters_output = clust_manager->GetClusters(GMSTClustering::max_alpha());
 
     for(auto & i : clusters_output) {
         A_t.push_back(i.GetA());
