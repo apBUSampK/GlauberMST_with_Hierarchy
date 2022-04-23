@@ -162,7 +162,7 @@ GMSTClusterVector GMSTClustering::GetClusters(max_alpha) {
         for (auto & iter : current) {
             int z_count = 0;
             for (int i = 0; i < iter.size; i++)
-                if (((TGlauNucleon*)nucleons->At(iter.V[i]))->IsProton())
+                if (((TGlauNucleon*)nucleons->At(iter.V[i] - 1))->IsProton())
                     z_count++;
             if (z_count == 2)
                 alpha++;
