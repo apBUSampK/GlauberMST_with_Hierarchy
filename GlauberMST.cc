@@ -42,7 +42,8 @@ manager->GetTree(true)->Branch("b", &b, "b/D");
 manager->GetTree(true)->Branch("A", "std::vector" ,&A_t);
 manager->GetTree(true)->Branch("Z", "std::vector" ,&Z_t);
 
-GMSTClustering* clust_manager = new GMSTClustering(manager->GetCriticalDistance(), manager->GetSingleSilhouette());
+GMSTClustering* clust_manager = new GMSTClustering(manager->GetCriticalDistance(), manager->GetSingleSilhouette(),
+                                                   manager->GetVariation());
 
 TRandom* rand = new TRandom(0);
 TGlauberMC *mcg=new TGlauberMC(manager->GetNucleusA(),manager->GetNucleusB(),manager->GetSigmaNN(),-1, rand->GetSeed());

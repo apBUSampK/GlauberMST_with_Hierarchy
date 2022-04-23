@@ -1,6 +1,5 @@
 #include "../include/GMSTClustering.hh"
 #include <queue>
-#define VAR .20
 
 
 bool cd_comp(const GNode& left, const GNode& right) {
@@ -17,14 +16,12 @@ GMSTClustering::GMSTClustering(){
 CritDist = 0;
 }
 
-GMSTClustering::GMSTClustering(double CD_in, double single_silh){
-    CritDist = CD_in;
-    this->single_silh = single_silh;
-};
+GMSTClustering::GMSTClustering(double CD_in, double single_silh, double variation) :
+    CritDist(CD_in), single_silh(single_silh), variation(variation) {}
 
 GMSTClustering::~GMSTClustering(){
     delete nucleons;
-};
+}
 
 Graph GMSTClustering::ClusterToGraph(){
     Graph g(A, A*(A-1)/2);
@@ -37,7 +34,7 @@ Graph GMSTClustering::ClusterToGraph(){
     	}
 	}
     return g;
-};
+}
 
 void GMSTClustering::SetUp(TObjArray* nucleons_in){
     A = 0;
@@ -100,13 +97,13 @@ GMSTClusterVector GMSTClustering::GetClusters_HSilhouette() {
     auto tr = g.AdvancedKruskalMST_Dendro();
     
     //get the clustering with the biggest applicable CD:
-    vector<GNode> current = tr.get_cluster(CritDist * (1.0 + VAR));
+    vector<GNode> current = tr.get_cluster(CritDist * (1.0 + variation));
     sort(current.begin(), current.end(), cd_comp);
     double max_silh = -1;
     vector<GNode> best = current;
     //calculate mean cluster silhouettes until min applicable CD
     //separate nucleon clusters are given silhouette of single_silh
-    while (current.front().height >= CritDist * (1.0 - VAR)) {
+    while (current.front().height > CritDist * (1.0 - (variation > 1 ? 1 : variation))) {
         double silh = 0;
         for (auto iter = current.cbegin(); iter != current.cend(); iter++) {
             if (iter->size > 1)

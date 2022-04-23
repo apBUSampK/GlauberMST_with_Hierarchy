@@ -103,7 +103,7 @@ class GMSTClustering{
 
 	public:
 	GMSTClustering();
-	GMSTClustering(double CD_in, double single_silh);
+	GMSTClustering(double CD_in, double single_silh, double variation);
 	~GMSTClustering();
 
 	inline double SetCD(double CD_in) {CritDist = CD_in;}
@@ -114,7 +114,7 @@ class GMSTClustering{
     GMSTClusterVector GetClusters_HSilhouette();
 	private:
 	//Work with graphs is up to Nepeyvoda Roman, even data types. I prefer GraphToCluster and ClusterToGraph methods to be private
-	double CritDist, single_silh;
+	double CritDist, single_silh, variation;
     int A{};
     Graph g;
     TObjArray* nucleons{};

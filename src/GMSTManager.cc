@@ -53,6 +53,12 @@ GMSTManager::GMSTManager()
       std::cin >> single_silh;
   }
 
+  while (variation < 0) {
+      std::cout << "Please enter the acceptable variation of critical distance (in percent): ";
+      std::cin >> variation;
+      variation /= 100;
+  }
+
   std::cout<<"\n";
 
   std::cout << "Please enter the file name to write histograms (.root will be supplied): ";
