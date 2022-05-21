@@ -113,9 +113,11 @@ class GMSTClustering{
     struct cut{};
     struct silhouette{};
     struct max_alpha{};
+    struct alpha_destroy{};
     GMSTClusterVector GetClusters(cut);
     GMSTClusterVector GetClusters(silhouette);
     GMSTClusterVector GetClusters(max_alpha);
+    GMSTClusterVector GetClusters(alpha_destroy);
 	private:
 	//Work with graphs is up to Nepeyvoda Roman, even data types. I prefer GraphToCluster and ClusterToGraph methods to be private
 	double CritDist, single_silh, variation;

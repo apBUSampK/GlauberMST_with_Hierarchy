@@ -1,5 +1,6 @@
 #include "../include/GMSTClustering.hh"
 #include <queue>
+#include <map>
 
 
 bool cd_comp(const GNode& left, const GNode& right) {
@@ -164,7 +165,7 @@ GMSTClusterVector GMSTClustering::GetClusters(max_alpha) {
             for (int i = 0; i < iter.size; i++)
                 if (((TGlauNucleon*)nucleons->At(iter.V[i] - 1))->IsProton())
                     z_count++;
-            if (z_count == 2)
+            if (z_count == 2 && iter.size == 4)
                 alpha++;
         }
         if (alpha > max_alpha) {
@@ -180,6 +181,52 @@ GMSTClusterVector GMSTClustering::GetClusters(max_alpha) {
     //compile output vector
     vector<vector<int>> clusters;
     for (const auto & iter : best)
+        clusters.emplace_back(vector<int>(iter.V, iter.V + iter.size));
+    return CompileVector(clusters);
+}
+
+GMSTClusterVector GMSTClustering::GetClusters(alpha_destroy) {
+    //check for empty nucleons input
+    if(!A)
+        return CompileVector(vector<vector<int>>());
+    //Get the c-link dendrogram
+    auto tr = g.AdvancedKruskalMST_Dendro();
+
+    //get the clustering with the biggest applicable CD:
+    vector<GNode> current = tr.get_cluster(CritDist * (1.0 + variation));
+    sort(current.begin(), current.end(), cd_comp);
+    int max_alpha = 0;
+    vector<GNode> best = current;
+    vector<vector<GNode>> all;
+
+    //find the cluster with the largest alpha particles count
+    while (current.front().height > CritDist * (1.0 - (variation > 1 ? 1 : variation))) {
+        int alpha = 0;
+        for (auto & iter : current) {
+            int z_count = 0;
+            for (int i = 0; i < iter.size; i++)
+                if (((TGlauNucleon*)nucleons->At(iter.V[i] - 1))->IsProton())
+                    z_count++;
+            if (z_count == 2 && iter.size == 4)
+                alpha++;
+        }
+        if (alpha > max_alpha) {
+            max_alpha = alpha;
+        }
+        all[alpha] = current;
+        //divide the biggest cluster into two
+        current.push_back(*current.front().children.first);
+        current.push_back(*current.front().children.second);
+        current.erase(current.begin());
+        sort(current.begin(), current.end(), cd_comp);
+    }
+
+    double p_dest = 0.002;
+    int n_destr = gRandom->Binomial(max_alpha, p_dest);
+
+    //compile output vector
+    vector<vector<int>> clusters;
+    for (const auto & iter : all[max_alpha - n_destr])
         clusters.emplace_back(vector<int>(iter.V, iter.V + iter.size));
     return CompileVector(clusters);
 }
