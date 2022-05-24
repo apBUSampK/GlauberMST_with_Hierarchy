@@ -196,8 +196,7 @@ GMSTClusterVector GMSTClustering::GetClusters(alpha_destroy) {
     vector<GNode> current = tr.get_cluster(CritDist * (1.0 + variation));
     sort(current.begin(), current.end(), cd_comp);
     int max_alpha = 0;
-    vector<GNode> best = current;
-    vector<vector<GNode>> all;
+    vector<vector<GNode>> all(5, vector<GNode>());
 
     //find the cluster with the largest alpha particles count
     while (current.front().height > CritDist * (1.0 - (variation > 1 ? 1 : variation))) {
@@ -223,10 +222,16 @@ GMSTClusterVector GMSTClustering::GetClusters(alpha_destroy) {
 
     double p_dest = 0.002;
     int n_destr = gRandom->Binomial(max_alpha, p_dest);
+    int n_remain = max_alpha - n_destr;
+    while(all[n_remain].empty()) {
+        n_remain = (n_remain) ? (n_remain - 1) : 4; //loop over [0; 4]
+        if (n_remain == max_alpha - n_destr)
+            break;
+    }
 
     //compile output vector
     vector<vector<int>> clusters;
-    for (const auto & iter : all[max_alpha - n_destr])
+    for (const auto & iter : all[n_remain])
         clusters.emplace_back(vector<int>(iter.V, iter.V + iter.size));
     return CompileVector(clusters);
 }
